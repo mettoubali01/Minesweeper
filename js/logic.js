@@ -1,11 +1,23 @@
+//variables
 let cols = 8, rows = 8, totalMines = 10; 
+let h = 0, m = 0, s = 0;
+let flag = false, flagStartBtn = true;
+let counterInterval;
+const msgDom = document.getElementById('msg');
+const tableDom = document.getElementsByTagName('table');
+const container = document.getElementById("container");
+const counter = document.getElementById("counter");
+const restartBtn = document.createElement('button');
+const startBtn = document.getElementById('start_button');
+const msgOfLoosing = "You just been explosed!! Try again ;)";
+const msgOfWinning = "Congratulations You.ve just win this round!! ;)";
 
-//random number between 0 - 19
+//generate a random number between 0 - 19
 function rndNumber(){
     return Math.floor(Math.random() * cols)
 }
 
-// Creating the multidimensional array
+// Create the multidimensional array
 function initContainer() {
     let mContainer = new Array(cols);
 
@@ -16,11 +28,11 @@ function initContainer() {
     return mContainer
 }
 
-// Filling out the multidimensional array with
+// Fill out the multidimensional array with
 //  1- coordineates
 //  2- mines
 function fillContainerWMinesCoor(){    
-    const iContainer = initContainer();
+    let iContainer = initContainer();
     let rndNumber1 = 0, rndNumber2 = 0;
 
     //fill with coordinates
@@ -39,12 +51,10 @@ function fillContainerWMinesCoor(){
         totalMines--;
     }
 
-    //return fillContainerWNMines()
-
     return iContainer;
 }
 
-//Filling with number of mines
+//Fill with number of mines
 function fillContainerWNMines() {
     const iContainer = fillContainerWMinesCoor();
     let counter = 0;
@@ -180,21 +190,56 @@ function fillContainerWNMines() {
     return iContainer;
 }
 
+//check if the mines are clicked and actuate
+function checkClickedMine(event){
+    let currentTarget = event.target;
+    let allInputs = document.getElementsByTagName("input");
+    
+    //in case of clicking a mine
+    if (!flag) {
+        if (currentTarget.value == 'X') {
+            for (let i = 0; i < allInputs.length; i++) {
+    
+                if (allInputs[i].value == 'X') {
+                    blockInputs(allInputs[i]);
+                    allInputs[i].className = ' show_input_value';
+                }
+            }
+            printFinalMsg(msgOfLoosing, flag);
+            currentTarget.className = ' clicked_mine ';
+
+            //in case of clicking an empty cell    
+        } else if (currentTarget.value.match('[\d:\d]')) {
+            currentTarget.className = 'empty_input ';
+            currentTarget.value = '';
+        } 
+        currentTarget.className += ' show_input_value ';
+    }
+}
+
+//remove the listener of clicking and clear the inteval 
+//means stop the counter
+function blockInputs(input) {
+    flag = true;
+    input.removeEventListener('click', checkClickedMine);
+    clearInterval(counterInterval);
+}
+
 //Printing the filled container on the html
 function printFilledContainer() {
-    const filledContainer = fillContainerWNMines();
-    const container = document.getElementById("container");
-    const table = document.createElement("table");
-
-    table.setAttribute('border', 1);
-    table.setAttribute('cellspacing', 0)
+    let filledContainer = fillContainerWNMines();
+    let table = document.createElement("table");
 
     for (let i = 0; i < filledContainer.length; i++) {
         let rowTable = document.createElement("tr");
         for (let j = 0; j < filledContainer[i].length; j++) {
             let cell = document.createElement("td");
-            cell.setAttribute('padding', 15)
-            cell.append(filledContainer[i][j]); 
+            let input = document.createElement("input");
+            input.type = 'button'
+            input.value = filledContainer[i][j];
+            input.className = "hide_input_value";
+            input.addEventListener("click", checkClickedMine.bind(this), false);
+            cell.appendChild(input); 
             rowTable.appendChild(cell);
         }
         table.appendChild(rowTable);
@@ -203,4 +248,86 @@ function printFilledContainer() {
     container.appendChild(table);
 }
 
-printFilledContainer();
+//print th emsg depen of he's winning or loosing
+function printFinalMsg(msg, isLoosed){
+    
+    restartBtn.append('Restart');
+    restartBtn.className = 'restart_button';
+
+    if (isLoosed) {
+        msgDom.className = 'msg loosing_msg'
+        msgDom.innerHTML = msg;
+        msgDom.parentNode.insertBefore(restartBtn, msgDom.nextSibling)
+        tableDom[0].className = 'red_border';
+    }
+}
+
+function printCounter() {
+    counter.innerHTML = "Counter: 00:00:00"
+}
+
+//increment the counter
+function incrementCounter(){
+    let sAux = '', mAux = '', hAux = '';
+
+    s++;
+
+    if (s == 60) {
+        m++;
+        s = 0;
+    } 
+    if (m == 60) {
+        h++;
+        m = 0;
+    }
+
+    s < 10 ? sAux = '0' + s : sAux = s;
+    m < 10 ? mAux = '0' + m : mAux = m;
+    h < 10 ? hAux = '0' + h : hAux = h;
+
+    counter.innerHTML = "Counter: " + hAux + ":" + mAux + ":" + sAux;
+}
+
+//init the counter every one second automatically
+function initTheInterval() {
+    counterInterval = setInterval( incrementCounter, 1000)
+}
+
+function hideStartBtn() {
+    if (!flagStartBtn) {
+        startBtn.style.display = 'block'
+    } else {
+        startBtn.style.display = 'none'
+    }
+}
+
+function resetAllVariables(){
+    s = 0, m = 0, h = 0;
+    flag = !flag;
+    flagStartBtn = !flagStartBtn;
+}
+
+function startTheGame() {    
+    printCounter();
+
+    startBtn.onclick =()=>{
+        initTheInterval();
+        printFilledContainer();
+
+        hideStartBtn();
+
+    };   
+}
+
+restartBtn.onclick =()=>{
+    printCounter();
+    resetAllVariables();
+
+    //clearInterval(initTheInterval);        
+    //initTheInterval();
+    window.location.reload();
+    hideStartBtn();
+};
+
+//invoking the game
+startTheGame();

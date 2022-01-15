@@ -1,0 +1,87 @@
+/*adding bottom margin between container div and setting div*/
+#container{
+    margin-top: 10px;
+    display: inline-grid;
+}
+
+/*removing spaces between the cells */
+table {
+    border-spacing: 0;
+}
+
+/*giving a red border to the the table in case of loosing*/
+.red_border{
+    border: 5px red solid;
+}
+
+/*removing the padding between the cells of the table*/
+td{
+    padding: 0;
+    border: 1px black solid;
+}
+
+/*giving a size to the btn*/
+input{
+    width: 50px;
+    height: 50px;
+    background-color: rgb(238, 238, 238);
+    font-size: 2em;
+}
+
+/*hiding the value of the btn*/
+.hide_input_value{
+    text-indent: -9000px;
+}
+
+/*show the value behind the btn*/
+.show_input_value, .clicked_mine{
+    text-indent: 0;
+}
+
+/*giving style to clicked mine*/
+.clicked_mine{
+    border: 4px black solid;
+    background-color: red;
+}
+
+/*giving a style to an empty btn*/
+.empty_input{
+    background-color: white;
+    /* border: 2px black solid; */
+    /* border-radius: 5%; */
+    display: block;
+}
+
+/*msg notification*/
+.msg{
+    text-align: center;
+    margin: 0;
+}
+
+.loosing_msg{
+    color: red;
+    font-size: 1.5em;
+    font-weight: bolder;
+    margin-bottom: 5px;
+}
+
+/*restart button*/
+.restart_button, #start_button{
+    background-color: red;
+    color: white;
+    padding: 0px 10px;
+    font-weight: bolder;
+    font-size: 1em;
+    margin-bottom: 5px;
+    font-variant: small-caps;
+}
+
+.restart_button:hover{
+    background-color: white;
+    border: 2px red solid;
+    color: black;
+    font-weight: bolder;
+    font-size: 1em;
+    margin-bottom: 5px;
+    font-variant: small-caps;
+}
