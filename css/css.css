@@ -1,3 +1,20 @@
+body{
+    background-color: rgb(98, 98, 98);
+
+}
+
+/*Giving style to the counter*/
+#counter{
+    color: #FFF;
+    font-weight: bolder;
+    font-size: 1.5em;
+}
+
+/*Change the colour of the title*/
+h1{
+    color: whitesmoke;
+}
+
 /*adding bottom margin between container div and setting div*/
 #container{
     margin-top: 10px;
@@ -16,25 +33,25 @@ table {
 
 /*removing the padding between the cells of the table*/
 td{
-    padding: 0;
-    border: 1px black solid;
-}
+    background-color: rgb(195, 195, 195);
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 1.5em;
 
-/*giving a size to the btn*/
-input{
-    width: 50px;
-    height: 50px;
-    background-color: rgb(238, 238, 238);
-    font-size: 2em;
 }
 
 /*hiding the value of the btn*/
-.hide_input_value{
+.hide_cell_value{
     text-indent: -9000px;
 }
 
 /*show the value behind the btn*/
-.show_input_value, .clicked_mine{
+.show_cell_value, .clicked_mine{
+    background-color: rgb(195,195,195);
     text-indent: 0;
 }
 
@@ -45,10 +62,10 @@ input{
 }
 
 /*giving a style to an empty btn*/
-.empty_input{
-    background-color: white;
-    /* border: 2px black solid; */
-    /* border-radius: 5%; */
+.empty_cell{
+    background-color: rgb(168, 164, 164);
+    border: 2px black solid;
+    border-radius: 5%;
     display: block;
 }
 
@@ -68,8 +85,8 @@ input{
 /*restart button*/
 .restart_button, #start_button{
     background-color: red;
-    color: white;
-    padding: 0px 10px;
+    color: #000;
+    padding: 5px 20px;
     font-weight: bolder;
     font-size: 1em;
     margin-bottom: 5px;

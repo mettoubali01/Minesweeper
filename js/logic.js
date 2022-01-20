@@ -10,7 +10,8 @@ const counter = document.getElementById("counter");
 const restartBtn = document.createElement('button');
 const startBtn = document.getElementById('start_button');
 const msgOfLoosing = "You just been explosed!! Try again ;)";
-const msgOfWinning = "Congratulations You.ve just win this round!! ;)";
+const msgOfWinning = "Congratulations You've just win this round!! ;)";
+const bomb = '💣';
 
 //generate a random number between 0 - 19
 function rndNumber(){
@@ -47,7 +48,7 @@ function fillContainerWMinesCoor(){
     while (totalMines > 0) {
         rndNumber1 = rndNumber();
         rndNumber2 = rndNumber();
-        iContainer[rndNumber1][rndNumber2] = 'X'
+        iContainer[rndNumber1][rndNumber2] = bomb;
         totalMines--;
     }
 
@@ -55,136 +56,47 @@ function fillContainerWMinesCoor(){
 }
 
 //Fill with number of mines
-function fillContainerWNMines() {
+function fillContainerWNMinesNCounter() {
     const iContainer = fillContainerWMinesCoor();
+    const lenContainer = iContainer.length;
     let counter = 0;
 
     for (let i = 0; i < iContainer.length; i++) {
         let innerArray = iContainer[i];
         for (let j = 0; j < innerArray.length; j++) {
-            //top left corner
-            if (iContainer[i][j] != 'X') {                
-                if (i == 0 && j == 0) {
-                    if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                        counter++;
-                    }
-                }
-                //top right corner
-                else if ((i == 0 && j == (rows - 1))) {
-                    if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                   }     
-                }
-                //left line 
-                else if ((i != 0 && i != rows -1 && j == 0)) {
-                    if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j+1] == 'X') {
-                        counter++;
-                    }
-                }
-                //right line
-                else if (i != 0 && i != (rows-1) && j == (cols - 1)) {
-                    if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    }  if (iContainer[i-1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                    } 
-                }    
-                // top line
-                else if (i == 0 && j != 0) {
-                    if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                         counter++;
-                    } 
-                }
-                //bottom line **
-                else if (i == (rows -1) && j != 0 && j != (cols -1)) {
-                    if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                        counter++;
-                    }    
-                }
-                // left bottom corner
-                 else if (i == (rows -1) && j == 0) {
-                    if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                        counter++;
-                    } 
-                }
-                // right bottom corner
-                else if (i == (rows -1) && j == (cols - 1)) {
-                    if (iContainer[i-1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    }
-                }
-                
-                if (i != 0 && j != 0 && i != (rows - 1) && j != (cols -1)) {
-                    if (iContainer[i-1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i-1][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i][j+1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j-1] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j] == 'X') {
-                        counter++;
-                    } if (iContainer[i+1][j+1] == 'X') {
-                        counter++;
-                    }
-                }
+
+            if (iContainer[i][j] != bomb) {                      
+                //up            
+                if ( (i > 0) && (iContainer[i-1][j] == bomb) )
+                    counter++;      
+                //upLeft
+                if ( (i > 0) && (j > 0) && (iContainer[i-1][j-1] == bomb) )
+                    counter++;     
+                //left
+                if ( (j > 0 ) && (iContainer[i][j-1] == bomb))
+                    counter++;   
+                //upRight 
+                if ( (i > 0) && ( (j + 1 ) <= lenContainer) && (iContainer[i-1][j+1] == bomb) )
+                    counter++;
+                //right
+                if ( ( (j+1) <= lenContainer) && (iContainer[i][j+1] == bomb) ) 
+                    counter++;   
+                //down
+                if ( ( (i+1) < lenContainer) && (iContainer[i+1][j] == bomb) ) 
+                    counter++;
+                //downLeft
+                if ( ((i+1) < lenContainer) && (j > 0) && (iContainer[i+1][j-1] == bomb))
+                    counter++;   
+                //downRight
+                if ( ((i+1) < lenContainer) && ( (j+1) <= lenContainer) &&  (iContainer[i+1][j+1] == bomb))
+                    counter++;
             }
-            if (counter != 0 ) {
+            
+            if (counter != 0 ) 
                 iContainer[i][j] = counter;
-            }
+            
             counter = 0;
-        }
+        }   
     }
 
     return iContainer;
@@ -192,28 +104,31 @@ function fillContainerWNMines() {
 
 //check if the mines are clicked and actuate
 function checkClickedMine(event){
-    let currentTarget = event.target;
-    let allInputs = document.getElementsByTagName("input");
-    
+    const currentTarget = event.target;
+    const allInputs = document.getElementsByTagName("td");
+    const filledContainer = fillContainerWNMinesNCounter();
+
+    console.log(currentTarget.textContent);
+
     //in case of clicking a mine
     if (!flag) {
-        if (currentTarget.value == 'X') {
+        if (currentTarget.textContent == bomb) {
             for (let i = 0; i < allInputs.length; i++) {
     
-                if (allInputs[i].value == 'X') {
+                if (allInputs[i].textContent == bomb) {
                     blockInputs(allInputs[i]);
-                    allInputs[i].className = ' show_input_value';
+                    allInputs[i].className = ' show_cell_value';
                 }
             }
             printFinalMsg(msgOfLoosing, flag);
             currentTarget.className = ' clicked_mine ';
 
             //in case of clicking an empty cell    
-        } else if (currentTarget.value.match('[\d:\d]')) {
-            currentTarget.className = 'empty_input ';
-            currentTarget.value = '';
+        } else if (currentTarget.textContent.match('[\d:\d]')) {
+            currentTarget.className = 'empty_cell ';
+            currentTarget.textContent = '';
         } 
-        currentTarget.className += ' show_input_value ';
+        currentTarget.className += ' show_cell_value ';
     }
 }
 
@@ -227,19 +142,17 @@ function blockInputs(input) {
 
 //Printing the filled container on the html
 function printFilledContainer() {
-    let filledContainer = fillContainerWNMines();
+    let filledContainer = fillContainerWNMinesNCounter();
     let table = document.createElement("table");
 
     for (let i = 0; i < filledContainer.length; i++) {
         let rowTable = document.createElement("tr");
         for (let j = 0; j < filledContainer[i].length; j++) {
             let cell = document.createElement("td");
-            let input = document.createElement("input");
-            input.type = 'button'
-            input.value = filledContainer[i][j];
-            input.className = "hide_input_value";
-            input.addEventListener("click", checkClickedMine.bind(this), false);
-            cell.appendChild(input); 
+            cell.textContent = filledContainer[i][j];
+            cell.className = "hide_cell_value";
+            cell.addEventListener("click", checkClickedMine.bind(this), false);
+
             rowTable.appendChild(cell);
         }
         table.appendChild(rowTable);
@@ -315,11 +228,10 @@ function startTheGame() {
         printFilledContainer();
 
         hideStartBtn();
-
     };   
 }
 
-restartBtn.onclick =()=>{
+restartBtn.onclick =(e)=>{
     printCounter();
     resetAllVariables();
 
