@@ -12,6 +12,7 @@ const startBtn = document.getElementById('start_button');
 const msgOfLoosing = "You just been explosed!! Try again ;)";
 const msgOfWinning = "Congratulations You've just win this round!! ;)";
 const bomb = '💣';
+const filledContainer = fillContainerWNMinesNCounter();
 
 //generate a random number between 0 - 19
 function rndNumber(){
@@ -106,29 +107,32 @@ function fillContainerWNMinesNCounter() {
 function checkClickedMine(event){
     const currentTarget = event.target;
     const allInputs = document.getElementsByTagName("td");
-    const filledContainer = fillContainerWNMinesNCounter();
-
-    console.log(currentTarget.textContent);
+    const currentRow = currentTarget.getAttribute("row");
+    const currentColumn = currentTarget.getAttribute("col");
+    const currentVal = filledContainer[currentRow][currentColumn]; 
 
     //in case of clicking a mine
     if (!flag) {
-        if (currentTarget.textContent == bomb) {
+        currentTarget.textContent = typeof currentVal != 'string' ? currentVal: '';
+
+        if (currentVal == bomb) {
+            currentTarget.textContent = currentVal;
             for (let i = 0; i < allInputs.length; i++) {
-    
-                if (allInputs[i].textContent == bomb) {
+                let row = allInputs[i].getAttribute("row");
+                let col = allInputs[i].getAttribute("col");
+
+                if (filledContainer[row][col] == bomb) {
                     blockInputs(allInputs[i]);
-                    allInputs[i].className = ' show_cell_value';
+                    allInputs[i].textContent = bomb;
                 }
             }
             printFinalMsg(msgOfLoosing, flag);
             currentTarget.className = ' clicked_mine ';
-
             //in case of clicking an empty cell    
-        } else if (currentTarget.textContent.match('[\d:\d]')) {
-            currentTarget.className = 'empty_cell ';
-            currentTarget.textContent = '';
         } 
-        currentTarget.className += ' show_cell_value ';
+        if (typeof currentVal == 'string' && currentVal.match('[\d:\d]')) {
+            currentTarget.className += ' empty_cell ';
+        } 
     }
 }
 
@@ -142,15 +146,17 @@ function blockInputs(input) {
 
 //Printing the filled container on the html
 function printFilledContainer() {
-    let filledContainer = fillContainerWNMinesNCounter();
+    let filledContainer = initContainer();
     let table = document.createElement("table");
 
     for (let i = 0; i < filledContainer.length; i++) {
         let rowTable = document.createElement("tr");
         for (let j = 0; j < filledContainer[i].length; j++) {
             let cell = document.createElement("td");
-            cell.textContent = filledContainer[i][j];
-            cell.className = "hide_cell_value";
+            cell.setAttribute("row", i);
+            cell.setAttribute("col", j);
+            cell.value = "5"
+            //cell.className = "hide_cell_value";
             cell.addEventListener("click", checkClickedMine.bind(this), false);
 
             rowTable.appendChild(cell);
@@ -206,6 +212,7 @@ function initTheInterval() {
     counterInterval = setInterval( incrementCounter, 1000)
 }
 
+//hide and show the start button
 function hideStartBtn() {
     if (!flagStartBtn) {
         startBtn.style.display = 'block'
@@ -214,12 +221,17 @@ function hideStartBtn() {
     }
 }
 
+//We reset all variable wich are related to 
+//- counter,
+//- flag to disable function of clciked cells 
+//- flag of the start butoon to control his visibility
 function resetAllVariables(){
     s = 0, m = 0, h = 0;
     flag = !flag;
     flagStartBtn = !flagStartBtn;
 }
 
+//start game function
 function startTheGame() {    
     printCounter();
 
@@ -231,14 +243,13 @@ function startTheGame() {
     };   
 }
 
+//restart button funcionality
 restartBtn.onclick =(e)=>{
     printCounter();
     resetAllVariables();
 
-    //clearInterval(initTheInterval);        
-    //initTheInterval();
-    window.location.reload();
     hideStartBtn();
+    window.location.reload();
 };
 
 //invoking the game
